@@ -16,6 +16,7 @@ class List:
         self.tail = nodo# o ultimo bloco
         self.max = maximo # o valor maximo do espaco de memoria
         self.min = minimo # o valor minimo do espaco de memoria
+        self.waiting_list = [] # lista para os blocos em que ocorreu fragmentacao externa
 
     def add_Bloco(self,aux, nodo, quant):
         if aux.tipo == 'L' and (aux.fim - aux.inicio) > quant:
@@ -28,6 +29,7 @@ class List:
                 nodo.proximo = aux
                 self.head = nodo
                 print("Alocacao realizada para o Bloco ",nodo.numero," na regiao ",nodo.inicio,"-",nodo.fim)
+                return True
             else: # pra qualquer nodo no meio ou no fim da lista
                 nodo.inicio = aux.inicio
                 aux.inicio = aux.inicio + quant
@@ -37,13 +39,17 @@ class List:
                 aux.anterior = nodo
                 nodo.proximo = aux
                 print("Alocacao realizada para o Bloco ",nodo.numero," na regiao ",nodo.inicio,"-",nodo.fim)
+                return True
         elif aux.tipo == 'L' and (aux.fim - aux.inicio) == quant:
                 aux.numero = nodo.numero
                 aux.tipo = 'S'
                 print("Alocacao realizada para o Bloco ",aux.numero," na regiao ",aux.inicio,"-",aux.fim)
+                return True
 
         elif aux == self.tail:
+            self.waiting_list.append((nodo,quant))
             self.fragmentacao(self.head, quant, 0)
+            return False
         else:
             self.add_Bloco(aux.proximo, nodo, quant)
 
@@ -83,6 +89,10 @@ class List:
             aux.numero = 0
             self.reorganize(aux)
             print("Bloco ",numero," (",aux.inicio,"-",aux.fim,") liberado com sucesso")
+            for nodo, quant in self.waiting_list:
+                res = self.add_Bloco(self.head, nodo, quant)
+                if res:
+                    self.waiting_list.remove((nodo, quant))
         elif aux == self.tail:
             print("Nenhum bloco com este numero encontrado.")
         else:
