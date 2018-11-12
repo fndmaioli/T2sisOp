@@ -27,6 +27,7 @@ class List:
                 aux.anterior = nodo
                 nodo.proximo = aux
                 self.head = nodo
+                print("Alocacao realizada para o Bloco ",nodo.numero," na regiao ",nodo.inicio,"-",nodo.fim)
             else: # pra qualquer nodo no meio ou no fim da lista
                 nodo.inicio = aux.inicio
                 aux.inicio = aux.inicio + quant
@@ -35,10 +36,11 @@ class List:
                 aux.anterior.proximo = nodo
                 aux.anterior = nodo
                 nodo.proximo = aux
-
+                print("Alocacao realizada para o Bloco ",nodo.numero," na regiao ",nodo.inicio,"-",nodo.fim)
         elif aux.tipo == 'L' and (aux.fim - aux.inicio) == quant:
                 aux.numero = nodo.numero
                 aux.tipo = 'S'
+                print("Alocacao realizada para o Bloco ",aux.numero," na regiao ",aux.inicio,"-",aux.fim)
 
         elif aux == self.tail:
             self.fragmentacao(self.head, quant, 0)
@@ -52,7 +54,7 @@ class List:
             livre += (aux.fim-aux.inicio)
             print(aux.inicio,"-",aux.fim,"  livre (tamanho ",aux.fim-aux.inicio,")")
         if aux == self.tail:
-            print(livre," livres, ",quant," solicitados - fragmentação externa")
+            print(livre," livres, ",quant," solicitados - fragmentacao externa")
         else:
             self.fragmentacao(aux.proximo, quant, livre)
 
@@ -66,40 +68,42 @@ class List:
                     break
                 removido.proximo.anterior = aux
 
-        if aux != self.head:                
+        if aux != self.head:
             while aux.anterior == 'L':
                 removido = aux.anterior
                 aux.inicio = removido.inicio
                 aux.anterior = removido.anterior
                 if removido == self.head:
                     break
-                removido.anterior.proximo = aux      
+                removido.anterior.proximo = aux
 
     def free_Bloco(self, aux,  numero):
         if aux.tipo == 'S' and aux.numero == numero:
             aux.tipo = 'L'
             aux.numero = 0
             self.reorganize(aux)
+            print("Bloco ",numero," (",aux.inicio,"-",aux.fim,") liberado com sucesso")
         elif aux == self.tail:
-            print("Nenhum bloco com este número encontrado.")
+            print("Nenhum bloco com este numero encontrado.")
         else:
             self.free_Bloco(aux.proximo, numero)
 
-
+file = open('casoTeste0.txt', 'r')
 indexBlocos = 1
-line = input()
+line = file.readline()
 modo = int(line)
-line = input()
+line = file.readline()
 mi = int(line)
-line = input()
+line = file.readline()
 mf = int(line)
 lista = List(mf, mi)
 
 while(True):
-    line = input()
+    line = file.readline().strip()
     if line == '':
+        print("Nenhum pedido restante.")
         break
-    
+
     tipo, num = line.split(' ')
     num = int(num)
     if tipo == "S":
@@ -108,8 +112,4 @@ while(True):
         indexBlocos = indexBlocos + 1
     elif tipo == "L":
         lista.free_Bloco(lista.head,num)
-    lista.fragmentacao(lista.head, 0, 0)
-
-
-
-
+    #lista.fragmentacao(lista.head, 0, 0)
