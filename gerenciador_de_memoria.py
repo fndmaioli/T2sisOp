@@ -47,10 +47,15 @@ class List:
                 return True
 
         elif aux == self.tail:
-            self.waiting_list.append((nodo,quant))
+            if not ((nodo,quant) in self.waiting_list):
+                self.waiting_list.append((nodo,quant))
             self.fragmentacao(self.head, quant, 0)
             return False
         else:
+            print(aux.numero)
+            print(aux.tipo)
+            print(aux.inicio)
+            print(aux.fim)
             self.add_Bloco(aux.proximo, nodo, quant)
 
     def fragmentacao(self, aux, quant, livre):
@@ -71,6 +76,7 @@ class List:
                 aux.fim = removido.fim
                 aux.proximo = removido.proximo
                 if removido == self.tail:
+                    self.tail = aux
                     break
                 removido.proximo.anterior = aux
 
@@ -80,6 +86,7 @@ class List:
                 aux.inicio = removido.inicio
                 aux.anterior = removido.anterior
                 if removido == self.head:
+                    self.head = aux
                     break
                 removido.anterior.proximo = aux
 
@@ -87,39 +94,48 @@ class List:
         if aux.tipo == 'S' and aux.numero == numero:
             aux.tipo = 'L'
             aux.numero = 0
+            inicio = aux.inicio
+            fim = aux.fim
             self.reorganize(aux)
-            print("Bloco ",numero," (",aux.inicio,"-",aux.fim,") liberado com sucesso")
-            for nodo, quant in self.waiting_list:
-                res = self.add_Bloco(self.head, nodo, quant)
-                if res:
-                    self.waiting_list.remove((nodo, quant))
+            print("Bloco ",numero," (",inicio,"-",fim,") liberado com sucesso")
+            self.search_space() # consertar erro o cara volta do nada sei la
         elif aux == self.tail:
             print("Nenhum bloco com este numero encontrado.")
         else:
             self.free_Bloco(aux.proximo, numero)
 
-file = open('casoTeste0.txt', 'r')
-indexBlocos = 1
-line = file.readline()
-modo = int(line)
-line = file.readline()
-mi = int(line)
-line = file.readline()
-mf = int(line)
-lista = List(mf, mi)
+    def search_space(self):
+        removido_index = None
+        res = False
+        print(self.waiting_list)
+        for i in range(0,len(self.waiting_list)):
+            nodo, quant = self.waiting_list[i]
+            res = self.add_Bloco(self.head, nodo, quant)
+            if res:
+                removido_index = i
+                break
+        if res:
+            del self.waiting_list[removido_index]
+            self.search_space()
 
-while(True):
-    line = file.readline().strip()
-    if line == '':
-        print("Nenhum pedido restante.")
-        break
 
-    tipo, num = line.split(' ')
-    num = int(num)
-    if tipo == "S":
-        nodo = Node(tipo,indexBlocos)
-        lista.add_Bloco(lista.head, nodo, num)
-        indexBlocos = indexBlocos + 1
-    elif tipo == "L":
-        lista.free_Bloco(lista.head,num)
-    #lista.fragmentacao(lista.head, 0, 0)
+
+with open('casoTeste1.txt', 'r') as file:
+    indexBlocos = 1
+    line = file.readline()
+    modo = int(line)
+    line = file.readline()
+    mi = int(line)
+    line = file.readline()
+    mf = int(line)
+    lista = List(mf, mi)
+    for line in file:
+        tipo, num = line.split(' ')
+        num = int(num)
+        if tipo == "S":
+            nodo = Node(tipo,indexBlocos)
+            lista.add_Bloco(lista.head, nodo, num)
+            indexBlocos = indexBlocos + 1
+        elif tipo == "L":
+            lista.free_Bloco(lista.head,num)
+        #lista.fragmentacao(lista.head, 0, 0)
