@@ -56,7 +56,7 @@ class List:
             print(aux.tipo)
             print(aux.inicio)
             print(aux.fim)
-            self.add_Bloco(aux.proximo, nodo, quant)
+            return self.add_Bloco(aux.proximo, nodo, quant)
 
     def fragmentacao(self, aux, quant, livre):
         if aux.tipo == "S":
@@ -98,7 +98,7 @@ class List:
             fim = aux.fim
             self.reorganize(aux)
             print("Bloco ",numero," (",inicio,"-",fim,") liberado com sucesso")
-            self.search_space() # consertar erro o cara volta do nada sei la
+            self.search_space()
         elif aux == self.tail:
             print("Nenhum bloco com este numero encontrado.")
         else:
