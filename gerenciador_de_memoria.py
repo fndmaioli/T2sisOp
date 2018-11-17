@@ -52,10 +52,6 @@ class List:
             self.fragmentacao(self.head, quant, 0)
             return False
         else:
-            print(aux.numero)
-            print(aux.tipo)
-            print(aux.inicio)
-            print(aux.fim)
             return self.add_Bloco(aux.proximo, nodo, quant)
 
     def fragmentacao(self, aux, quant, livre):
@@ -81,7 +77,7 @@ class List:
                 removido.proximo.anterior = aux
 
         if aux != self.head:
-            while aux.anterior == 'L':
+            while aux.anterior.tipo == 'L':
                 removido = aux.anterior
                 aux.inicio = removido.inicio
                 aux.anterior = removido.anterior
@@ -107,7 +103,6 @@ class List:
     def search_space(self):
         removido_index = None
         res = False
-        print(self.waiting_list)
         for i in range(0,len(self.waiting_list)):
             nodo, quant = self.waiting_list[i]
             res = self.add_Bloco(self.head, nodo, quant)
@@ -138,4 +133,3 @@ with open('casoTeste1.txt', 'r') as file:
             indexBlocos = indexBlocos + 1
         elif tipo == "L":
             lista.free_Bloco(lista.head,num)
-        #lista.fragmentacao(lista.head, 0, 0)
