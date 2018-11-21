@@ -114,7 +114,6 @@ class List:
             self.search_space()
 
 
-
 with open('casoTeste1.txt', 'r') as file:
     indexBlocos = 1
     line = file.readline()
@@ -133,3 +132,5 @@ with open('casoTeste1.txt', 'r') as file:
             indexBlocos = indexBlocos + 1
         elif tipo == "L":
             lista.free_Bloco(lista.head,num)
+
+    #lista.fragmentacao(lista.head, 0, 0)
