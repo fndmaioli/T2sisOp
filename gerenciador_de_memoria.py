@@ -28,7 +28,7 @@ class List:
                 aux.anterior = nodo
                 nodo.proximo = aux
                 self.head = nodo
-                print("Alocacao realizada para o Bloco ",nodo.numero," na regiao ",nodo.inicio,"-",nodo.fim)
+                print('Alocacao realizada para o Bloco ',nodo.numero,' na regiao ',nodo.inicio,'-',nodo.fim)
                 return True
             else: # pra qualquer nodo no meio ou no fim da lista
                 nodo.inicio = aux.inicio
@@ -38,32 +38,43 @@ class List:
                 aux.anterior.proximo = nodo
                 aux.anterior = nodo
                 nodo.proximo = aux
-                print("Alocacao realizada para o Bloco ",nodo.numero," na regiao ",nodo.inicio,"-",nodo.fim)
+                print('Alocacao realizada para o Bloco ',nodo.numero,' na regiao ',nodo.inicio,'-',nodo.fim)
                 return True
         elif aux.tipo == 'L' and (aux.fim - aux.inicio) == quant:
                 aux.numero = nodo.numero
                 aux.tipo = 'S'
-                print("Alocacao realizada para o Bloco ",aux.numero," na regiao ",aux.inicio,"-",aux.fim)
+                print('Alocacao realizada para o Bloco ',aux.numero,' na regiao ',aux.inicio,'-',aux.fim)
                 return True
 
         elif aux == self.tail:
             if not ((nodo,quant) in self.waiting_list):
                 self.waiting_list.append((nodo,quant))
-            self.fragmentacao(self.head, quant, 0)
+                self.fragmentacao(self.head, quant, 0)
             return False
         else:
             return self.add_Bloco(aux.proximo, nodo, quant)
 
     def fragmentacao(self, aux, quant, livre):
-        if aux.tipo == "S":
-            print(aux.inicio,"-",aux.fim,"  bloco ",aux.numero," (tamanho ",aux.fim-aux.inicio,")")
+        if aux.tipo == 'S':
+            print(aux.inicio,'-',aux.fim,'  bloco ',aux.numero,' (tamanho ',aux.fim-aux.inicio,')')
         else:
             livre += (aux.fim-aux.inicio)
-            print(aux.inicio,"-",aux.fim,"  livre (tamanho ",aux.fim-aux.inicio,")")
+            print(aux.inicio,'-',aux.fim,'  livre (tamanho ',aux.fim-aux.inicio,')')
         if aux == self.tail:
-            print(livre," livres, ",quant," solicitados - fragmentacao externa")
+            if quant > livre:
+                print(livre,' livres, ',quant,' solicitados - falta de memoria')
+            else:
+                print(livre,' livres, ',quant,' solicitados - fragmentacao externa')
         else:
             self.fragmentacao(aux.proximo, quant, livre)
+
+    def final_estate(self, aux):
+        if aux.tipo == 'S':
+            print(aux.inicio,'-',aux.fim,'  bloco ',aux.numero,' (tamanho ',aux.fim-aux.inicio,')')
+        else:
+            print(aux.inicio,'-',aux.fim,'  livre (tamanho ',aux.fim-aux.inicio,')')
+        if aux != self.tail:
+            self.final_estate(aux.proximo)
 
     def reorganize(self, aux):
         if aux != self.tail:
@@ -93,14 +104,14 @@ class List:
             inicio = aux.inicio
             fim = aux.fim
             self.reorganize(aux)
-            print("Bloco ",numero," (",inicio,"-",fim,") liberado com sucesso")
-            self.search_space()
+            print('Bloco ',numero,' (',inicio,'-',fim,') liberado com sucesso')
+            self.search_wait_list()
         elif aux == self.tail:
-            print("Nenhum bloco com este numero encontrado.")
+            print('Nenhum bloco com este numero encontrado.')
         else:
             self.free_Bloco(aux.proximo, numero)
 
-    def search_space(self):
+    def search_wait_list(self):
         removido_index = None
         res = False
         for i in range(0,len(self.waiting_list)):
@@ -111,11 +122,11 @@ class List:
                 break
         if res:
             del self.waiting_list[removido_index]
-            self.search_space()
+            self.search_wait_list()
 
 
 
-with open('casoTeste1.txt', 'r') as file:
+with open('casoTeste2.txt', 'r') as file:
     indexBlocos = 1
     line = file.readline()
     modo = int(line)
@@ -127,9 +138,10 @@ with open('casoTeste1.txt', 'r') as file:
     for line in file:
         tipo, num = line.split(' ')
         num = int(num)
-        if tipo == "S":
+        if tipo == 'S':
             nodo = Node(tipo,indexBlocos)
             lista.add_Bloco(lista.head, nodo, num)
             indexBlocos = indexBlocos + 1
-        elif tipo == "L":
+        elif tipo == 'L':
             lista.free_Bloco(lista.head,num)
+    lista.final_estate(lista.head)
