@@ -1,0 +1,23 @@
+Alocacao realizada para o Bloco  1  na regiao  100 - 350
+Alocacao realizada para o Bloco  2  na regiao  350 - 450
+Alocacao realizada para o Bloco  3  na regiao  450 - 650
+Bloco  2  ( 350 - 450 ) liberado com sucesso
+Alocacao realizada para o Bloco  4  na regiao  650 - 800
+Alocacao realizada para o Bloco  5  na regiao  800 - 950
+Alocacao realizada para o Bloco  6  na regiao  950 - 1100
+Bloco  5  ( 800 - 950 ) liberado com sucesso
+100 - 350   bloco  1  (tamanho  250 )
+350 - 450   livre (tamanho  100 )
+450 - 650   bloco  3  (tamanho  200 )
+650 - 800   bloco  4  (tamanho  150 )
+800 - 950   livre (tamanho  150 )
+950 - 1100   bloco  6  (tamanho  150 )
+1100 - 1250   livre (tamanho  150 )
+400  livres,  200  solicitados - fragmentacao externa
+100 - 350   bloco  1  (tamanho  250 )
+350 - 450   livre (tamanho  100 )
+450 - 650   bloco  3  (tamanho  200 )
+650 - 800   bloco  4  (tamanho  150 )
+800 - 950   livre (tamanho  150 )
+950 - 1100   bloco  6  (tamanho  150 )
+1100 - 1250   livre (tamanho  150 )
