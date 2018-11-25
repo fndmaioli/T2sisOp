@@ -123,7 +123,7 @@ class List:
             self.search_wait_list()
 
 
-with open('casoTeste1.txt', 'r') as file:
+with open('casoTeste0.txt', 'r') as file:
     indexBlocos = 1
     line = file.readline()
     modo = int(line)
